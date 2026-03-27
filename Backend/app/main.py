@@ -9,7 +9,7 @@ app = FastAPI(title=settings.PROJECT_NAME, version=settings.VERSION)
 
 @app.get("/")
 async def root() -> dict[str, str]:
-    return {"message": "Bienvenido a Platziflix API"}
+    return {"message": "Bienvenido a Platziflix API."}
 
 
 @app.get("/health")
