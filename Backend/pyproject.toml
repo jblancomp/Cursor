@@ -1,0 +1,16 @@
+[project]
+name = "platziflix"
+version = "0.1.0"
+description = "Platziflix backend API"
+authors = [
+    { name = "MP Sistemas" }
+]
+requires-python = ">=3.11"
+dependencies = [
+  "fastapi>=0.104.0",
+  "uvicorn[standard]>=0.24.0",
+  "sqlalchemy>=2.0.0",
+  "psycopg2-binary>=2.9.0",
+  "pydantic-settings>=2.0.0",
+  "python-dotenv>=1.0.0",
+]
