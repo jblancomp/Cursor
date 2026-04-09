@@ -1,35 +1,23 @@
-from __future__ import annotations
-
-from datetime import datetime
-
-from sqlalchemy import DateTime, String, func
-from sqlalchemy.orm import Mapped, mapped_column, relationship
-
-from app.db.base import Base
-from app.models.course_teacher import course_teachers
+from sqlalchemy import Column, String
+from sqlalchemy.orm import relationship
+from .base import BaseModel
 
 
-class Teacher(Base):
-    __tablename__ = "teachers"
-
-    id: Mapped[int] = mapped_column(primary_key=True)
-    name: Mapped[str] = mapped_column(String(255), nullable=False)
-    email: Mapped[str] = mapped_column(String(320), nullable=False, unique=True, index=True)
-
-    created_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), nullable=False, server_default=func.now()
+class Teacher(BaseModel):
+    """
+    Teacher model representing instructors for courses.
+    """
+    __tablename__ = 'teachers'
+    
+    name = Column(String(255), nullable=False)
+    email = Column(String(255), nullable=False, unique=True, index=True)
+    
+    # Many-to-many relationship with Course
+    courses = relationship(
+        "Course", 
+        secondary="course_teachers", 
+        back_populates="teachers"
     )
-    updated_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True),
-        nullable=False,
-        server_default=func.now(),
-        onupdate=func.now(),
-    )
-    deleted_at: Mapped[datetime | None] = mapped_column(
-        DateTime(timezone=True), nullable=True
-    )
-
-    courses: Mapped[list["Course"]] = relationship(
-        secondary=course_teachers, back_populates="teachers"
-    )
-
+    
+    def __repr__(self):
+        return f"<Teacher(id={self.id}, name='{self.name}', email='{self.email}')>" 

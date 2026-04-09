@@ -1,13 +1,10 @@
-from sqlalchemy import Column, ForeignKey, Table
+from sqlalchemy import Table, Column, Integer, ForeignKey
+from .base import Base
 
-from app.db.base import Base
-
+# Association table for many-to-many relationship between Course and Teacher
 course_teachers = Table(
-    "course_teachers",
+    'course_teachers',
     Base.metadata,
-    Column("course_id", ForeignKey("courses.id", ondelete="CASCADE"), primary_key=True),
-    Column(
-        "teacher_id", ForeignKey("teachers.id", ondelete="CASCADE"), primary_key=True
-    ),
-)
-
+    Column('course_id', Integer, ForeignKey('courses.id'), primary_key=True),
+    Column('teacher_id', Integer, ForeignKey('teachers.id'), primary_key=True)
+) 

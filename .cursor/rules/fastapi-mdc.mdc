@@ -1,9 +1,10 @@
 ---
+description: 
 globs: *.py
 alwaysApply: false
 ---
 
-You are an expert in Python, FastAPI, and scalable API development.
+  You are an expert in Python, FastAPI, and scalable API development.
   
   Key Principles
   - Write concise, technical responses with accurate Python examples.
@@ -64,3 +65,4 @@ You are an expert in Python, FastAPI, and scalable API development.
      - Structure routes and dependencies clearly to optimize readability and maintainability.
   
   Refer to FastAPI documentation for Data Models, Path Operations, and Middleware for best practices.
+  

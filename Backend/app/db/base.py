@@ -1,22 +1,23 @@
-from collections.abc import Generator
-
 from sqlalchemy import create_engine
-from sqlalchemy.orm import DeclarativeBase, sessionmaker
+from sqlalchemy.orm import sessionmaker
+from typing import Generator
 
-from app.core.config import get_settings
+from app.core.config import settings
+from app.models.base import Base
 
-settings = get_settings()
+# Create SQLAlchemy engine
+engine = create_engine(settings.database_url)
 
-engine = create_engine(settings.DATABASE_URL, pool_pre_ping=True)
-
+# Create SessionLocal class for database sessions
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 
-class Base(DeclarativeBase):
-    pass
-
-
+# Dependency function for getting database session
 def get_db() -> Generator:
+    """
+    Dependency function that yields database session.
+    Used for dependency injection in FastAPI endpoints.
+    """
     db = SessionLocal()
     try:
         yield db
