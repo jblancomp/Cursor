@@ -1,22 +1,9 @@
 from logging.config import fileConfig
-from pathlib import Path
-import sys
-
-# Ensure project root is on sys.path (e.g. `alembic -c app/alembic.ini` from repo root, or Docker volume).
-# env.py lives at <project_root>/app/alembic/env.py
-_root = Path(__file__).resolve().parents[2]
-if str(_root) not in sys.path:
-    sys.path.insert(0, str(_root))
 
 from sqlalchemy import engine_from_config
 from sqlalchemy import pool
 
 from alembic import context
-
-# Import models so Base.metadata is populated for autogenerate.
-from app.db.base import Base  # noqa: E402
-from app.core.config import get_settings  # noqa: E402
-import app.models  # noqa: F401, E402
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -29,8 +16,16 @@ if config.config_file_name is not None:
 
 # add your model's MetaData object here
 # for 'autogenerate' support
-# from myapp import mymodel
-# target_metadata = mymodel.Base.metadata
+import sys
+import os
+
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))
+
+from app.models.base import Base
+
+# Import all models so Alembic can detect them
+from app.models import *  # noqa
+
 target_metadata = Base.metadata
 
 # other values from the config, defined by the needs of env.py,
@@ -51,8 +46,7 @@ def run_migrations_offline() -> None:
     script output.
 
     """
-    settings = get_settings()
-    url = settings.DATABASE_URL
+    url = config.get_main_option("sqlalchemy.url")
     context.configure(
         url=url,
         target_metadata=target_metadata,
@@ -71,11 +65,8 @@ def run_migrations_online() -> None:
     and associate a connection with the context.
 
     """
-    settings = get_settings()
-    configuration = config.get_section(config.config_ini_section, {})
-    configuration["sqlalchemy.url"] = settings.DATABASE_URL
     connectable = engine_from_config(
-        configuration,
+        config.get_section(config.config_ini_section, {}),
         prefix="sqlalchemy.",
         poolclass=pool.NullPool,
     )
