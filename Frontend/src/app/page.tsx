@@ -1,57 +1,47 @@
 import styles from "./page.module.scss";
-import { fetchCoursesList } from "@/lib/fetchCourses";
+import { Course } from "@/types";
+import { Course as CourseComponent } from "@/components/Course/Course";
+
+async function getCourses(): Promise<Course[]> {
+  const res = await fetch("http://localhost:8000/courses", { cache: "no-store" });
+  if (!res.ok) {
+    throw new Error("Failed to fetch courses");
+  }
+  const data = await res.json();
+  return data.data;
+}
 
 export default async function Home() {
-  let errorMessage: string | null = null;
-  let courses: Awaited<ReturnType<typeof fetchCoursesList>> = [];
-
-  try {
-    courses = await fetchCoursesList();
-  } catch (err) {
-    errorMessage =
-      err instanceof Error ? err.message : "Error al cargar los cursos.";
-  }
+  const courses = await getCourses();
 
   return (
     <div className={styles.page}>
-      <header className={styles.header}>
-        <h1 className={styles.title}>MP Sistemas</h1>
-        <p className={styles.subtitle}>Catálogo de cursos</p>
+      {/* Banner superior */}
+      <header className={styles.banner}>
+        <span className={styles.bannerRed}>PLATZI</span>
+        <span className={styles.bannerBlack}>FLIX</span>
+        <span className={styles.bannerSub}>CURSOS</span>
       </header>
-
+      {/* Nombres laterales */}
+      <div className={styles.verticalLeft}>PLATZI</div>
+      <div className={styles.verticalRight}>FLIX</div>
+      {/* Grid de cursos */}
       <main className={styles.main}>
-        {errorMessage ? (
-          <p className={styles.error} role="alert">
-            {errorMessage}
-          </p>
-        ) : courses.length === 0 ? (
-          <p className={styles.empty}>No hay cursos disponibles.</p>
-        ) : (
-          <ul className={styles.grid}>
-            {courses.map((course) => (
-              <li key={course.id}>
-                <article className={styles.card}>
-                  <div className={styles.cardImageWrap}>
-                    {/* eslint-disable-next-line @next/next/no-img-element -- API thumbnails; arbitrary origins */}
-                    <img
-                      className={styles.cardImage}
-                      src={course.thumbnail}
-                      alt=""
-                    />
-                  </div>
-                  <div className={styles.cardBody}>
-                    <h2 className={styles.cardTitle}>{course.name}</h2>
-                    <p className={styles.cardDescription}>
-                      {course.description}
-                    </p>
-                    <p className={styles.cardMeta}>{course.slug}</p>
-                  </div>
-                </article>
-              </li>
-            ))}
-          </ul>
-        )}
+        <div className={styles.coursesGrid}>
+          {courses.map((course) => (
+            <CourseComponent
+              key={course.id}
+              id={course.id}
+              title={course.title}
+              teacher={course.teacher}
+              duration={course.duration}
+              thumbnail={course.thumbnail}
+            />
+          ))}
+        </div>
       </main>
+      {/* Fondo de cuadrícula */}
+      <div className={styles.gridBg}></div>
     </div>
   );
 }
