@@ -21,10 +21,10 @@ import os
 
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 
-from app.models.base import Base
+from models.base import Base
 
 # Import all models so Alembic can detect them
-from app.models import *  # noqa
+from models import *  # noqa
 
 target_metadata = Base.metadata
 
