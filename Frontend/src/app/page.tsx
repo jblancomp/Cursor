@@ -32,7 +32,7 @@ export default async function Home() {
             <CourseComponent
               key={course.id}
               id={course.id}
-              title={course.title}
+              name={course.name}
               teacher={course.teacher}
               duration={course.duration}
               thumbnail={course.thumbnail}
