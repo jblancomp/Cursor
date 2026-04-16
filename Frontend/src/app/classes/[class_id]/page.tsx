@@ -27,7 +27,7 @@ export default async function ClassPage({ params }: ClassPageProps) {
       <VideoPlayer src={classData.video} title={classData.title} />
       <h1 className={styles.title}>{classData.title}</h1>
       <p className={styles.description}>{classData.description}</p>
-      <Link href="/course" className={styles.backButton}>
+      <Link href={`/course/${classData.course_slug}`} className={styles.backButton}>
         ← Regresar al curso
       </Link>
     </main>

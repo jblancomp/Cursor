@@ -4,12 +4,16 @@ from sqlalchemy.orm import Session
 from app.core.config import settings
 from app.db.base import engine, get_db
 from app.services.course_service import CourseService
+from app.services.class_service import ClassService
 
 app = FastAPI(title=settings.project_name, version=settings.version)
 
 
 def get_course_service(db: Session = Depends(get_db)) -> CourseService:
     return CourseService(db)
+
+def get_class_service(db: Session = Depends(get_db)) -> ClassService:
+    return ClassService(db)
 
 
 @app.get("/")
@@ -74,3 +78,19 @@ def get_course_by_slug(
         raise HTTPException(status_code=404, detail="Course not found")
     
     return course
+
+
+@app.get("/classes/{class_id}")
+def get_class_by_id(
+    class_id: int, class_service: ClassService = Depends(get_class_service)
+) -> dict:
+    """
+    Get a class (lesson) by its ID.
+    Returns class information.
+    """
+    lesson = class_service.get_class_by_id(class_id)
+
+    if not lesson:
+        raise HTTPException(status_code=404, detail="class not found")
+
+    return lesson

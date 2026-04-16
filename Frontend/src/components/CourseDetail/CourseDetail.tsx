@@ -29,7 +29,7 @@ export const CourseDetailComponent: FC<CourseDetailComponentProps> = ({ course }
         </div>
         <div className={styles.courseInfo}>
           <h1 className={styles.title}>{course.name}</h1>
-          <p className={styles.teacher}>Por {course.teacher}</p>
+          <p className={styles.teacher}>Por {course.teachers.join(", ")}</p>
           <p className={styles.description}>{course.description}</p>
           <div className={styles.stats}>
             <span className={styles.duration}>Duración total: {formatDuration(totalDuration)}</span>
@@ -42,14 +42,14 @@ export const CourseDetailComponent: FC<CourseDetailComponentProps> = ({ course }
         <h2 className={styles.sectionTitle}>Contenido del curso</h2>
         <div className={styles.classesList}>
           {course.classes.map((cls, index) => (
-            <div key={cls.id} className={styles.classItem}>
+            <Link href={`/classes/${cls.id}`} key={cls.id} className={styles.classItem}>
               <div className={styles.classNumber}>{(index + 1).toString().padStart(2, "0")}</div>
               <div className={styles.classInfo}>
                 <h3 className={styles.classTitle}>{cls.title}</h3>
                 <p className={styles.classDescription}>{cls.description}</p>
                 <span className={styles.classDuration}>{formatDuration(cls.duration)}</span>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       </div>

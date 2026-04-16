@@ -2,7 +2,7 @@
 export interface Course {
   id: number;
   name: string;
-  teacher: string;
+  teachers: string[];
   duration: number;
   thumbnail: string;
   slug: string;
@@ -16,6 +16,7 @@ export interface Class {
   video: string;
   duration: number;
   slug: string;
+  course_slug: string;
 }
 
 // Course Detail type

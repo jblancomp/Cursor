@@ -3,7 +3,7 @@ import { Course as CourseType } from "@/types";
 
 type CourseProps = Omit<CourseType, "slug">;
 
-export const Course = ({name, teacher, duration, thumbnail }: CourseProps) => {
+export const Course = ({name, teachers, duration, thumbnail }: CourseProps) => {
   return (
     <article className={styles.courseCard}>
       <div className={styles.thumbnailContainer}>
@@ -11,7 +11,7 @@ export const Course = ({name, teacher, duration, thumbnail }: CourseProps) => {
       </div>
       <div className={styles.courseInfo}>
         <h2 className={styles.courseTitle}>{name}</h2>
-        <p className={styles.teacher}>Profesor: {teacher}</p>
+        <p className={styles.teacher}>Profesor: {teachers.join(", ")}</p>
         <p className={styles.duration}>Duración: {duration} minutos</p>
       </div>
     </article>

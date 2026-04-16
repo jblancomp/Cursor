@@ -29,7 +29,8 @@ class CourseService:
                 "name": course.name,
                 "description": course.description,
                 "thumbnail": course.thumbnail,
-                "slug": course.slug
+                "slug": course.slug,
+                "teachers": [t.name for t in course.teachers]
             }
             for course in courses
         ]
@@ -64,7 +65,7 @@ class CourseService:
             "description": course.description,
             "thumbnail": course.thumbnail,
             "slug": course.slug,
-            "teacher_id": [teacher.id for teacher in course.teachers],
+            "teachers": [teacher.name for teacher in course.teachers],
             "classes": [
                 {
                     "id": lesson.id,
